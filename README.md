@@ -1,2 +1,2 @@
 # pxepi
-Enable PXE boot on Raspberry Pi 4
+Script to enable PXE boot on Raspberry Pi 4

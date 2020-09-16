@@ -1,0 +1,71 @@
+#Show current boot setting. 
+#0x1 is the default, 0x21 is needed for PXE boot. 
+vcgencmd bootloader_config | grep BOOT_ORDER | awk -F '= ' '{print $1}'
+
+#Is bootloader up to date?
+rpi-eeprom-update | grep BOOTLOADER
+
+#Manually update eeprom:
+sudo rpi-eeprom-update -a
+sudo reboot
+
+# Copy
+
+
+
+#Display serial and model number:
+#cat /proc/cpuinfo | grep Serial | awk -F ': ' '{print $2}' 
+#cat /proc/cpuinfo | grep Model | awk -F ': ' '{print $2}' 
+
+#MAC Address:
+#ip addr show eth0 | grep ether | awk '{print $2}'
+
+#Is /boot/bootcode.bin present$ Need to remove it on Pi 4
+
+#Make certain that you have the latest rpi-eeprom
+#sudo apt update
+#sudo apt full-upgrade
+#sudo reboot
+
+/*
+pi@cluster01:~ $ rpi-eeprom-update
+BCM2711 detected
+Dedicated VL805 EEPROM detected
+*** UPDATE AVAILABLE ***
+BOOTLOADER: update available
+CURRENT: Fri 10 May 18:40:36 UTC 2019 (1557513636)
+ LATEST: Thu 16 Apr 17:11:26 UTC 2020 (1587057086)
+ FW DIR: /lib/firmware/raspberrypi/bootloader/critical
+VL805: version unknown. Try sudo rpi-eeprom-update
+CURRENT:
+ LATEST: 000137ad
+
+pi@cluster01:~ $ sudo rpi-eeprom-update -a
+BCM2711 detected
+Dedicated VL805 EEPROM detected
+BOOTFS /boot
+*** INSTALLING EEPROM UPDATES ***
+BOOTLOADER: update available
+CURRENT: Fri 10 May 18:40:36 UTC 2019 (1557513636)
+ LATEST: Thu 16 Apr 17:11:26 UTC 2020 (1587057086)
+ FW DIR: /lib/firmware/raspberrypi/bootloader/critical
+VL805: update available
+CURRENT: 00013701
+ LATEST: 000137ad
+BOOTFS /boot
+EEPROM updates pending. Please reboot to apply the update.
+
+151  rpi-eeprom-config new-pieeprom.bin > bootconf.txt
+  152  rpi-eeprom-config new-pieeprom.bin
+  153  touch bootconf.txt
+  154  sudo touch bootconf.txt
+  155  sudo rpi-eeprom-config new-pieeprom.bin > bootconf.txt
+  156  sudo rpi-eeprom-config new-pieeprom.bin
+  157  vi bootconf.txt
+  158  sudi vi bootconf.txt
+  159  sudo vi bootconf.txt
+  160  sudo rpi-eeprom-config --out netboot-pieeprom.bin --config bootconf.txt new-pieeprom.bin
+  161  rpi-eeprom-update -d -f ./netboot-pieeprom.bin
+  162  sudo rpi-eeprom-update -d -f ./netboot-pieeprom.bin
+  163  rm bootconf.txt
+*/
