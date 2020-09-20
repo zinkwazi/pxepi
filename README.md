@@ -7,8 +7,8 @@ Run updates first:
 sudo apt update  
 sudo apt full-upgrade  
 
-Install Git:
-apt install git
+Install Git:  
+sudo apt install git
   
 Usage:  
 git clone https://github.com/zinkwazi/pxepi.git  
