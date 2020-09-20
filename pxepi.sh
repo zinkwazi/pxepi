@@ -32,7 +32,7 @@ function isPxeBoot {
     IFS="="
     read -ra ADDR <<<"$bootOrder"
     currentBootorder=${ADDR[1]}
-    if [ $currentBootorder == "0x21" ] ; then
+    if [ "$currentBootorder" == "0x21" ] ; then
       echo "PXE boot is enabled, BOOT_ORDER=$currentBootorder"
     else
       echo $currentBootorder
