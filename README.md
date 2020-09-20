@@ -14,3 +14,5 @@ Usage:
 git clone https://github.com/zinkwazi/pxepi.git  
 cd pxepi  
 sudo ./pxepi.sh  
+
+Now your Raspberry Pi 4 will PXE boot if there is no SD card present!
