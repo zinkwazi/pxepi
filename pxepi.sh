@@ -59,6 +59,9 @@ function pieeprom_config() {
     sed -i 's/BOOT_ORDER=.*/BOOT_ORDER=0x21/gI' eeprom-config.txt
     rpi-eeprom-config --out pxepi-eeprom.bin --config eeprom-config.txt $latest_pieeprom.tmp
     rpi-eeprom-update -d -f pxepi-eeprom.bin
+    # Show the boot order to verify
+    bootOrder=$(vcgencmd bootloader_config | grep BOOT_ORDER | awk -F "= " "{print $1}")
+    echo $bootOrder
  }
 
 isPi4
