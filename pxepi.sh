@@ -7,12 +7,15 @@
 : ${pname:=pieeprom-}
 
 if [ "$(id -u)" -ne 0 ]; then
-    echo 'This script must be run by root' >&2
+    echo 'This script must be run with sudo' >&2
     exit 1
 fi
 
 function isPi4 () {
-#    piModel=$(cat /proc/device-tree/model)
+    if [ ! -f /proc/device-tree/model ] ; then
+      echo "ERROR: Raspberry Pi not detected"
+      exit 1
+    fi
     piModel=$(tr -d '\0' < /proc/device-tree/model)
     IFS=" "
     read -ra ADDR <<<"$piModel"
