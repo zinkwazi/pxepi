@@ -29,6 +29,7 @@ function isPi4 () {
 
 function isPxeBoot {
     bootOrder=$(vcgencmd bootloader_config | grep BOOT_ORDER | awk -F "= " "{print $1}")
+    echo $bootOrder
     IFS="="
     read -ra ADDR <<<"$bootOrder"
     currentBootorder=${ADDR[1]}
@@ -55,7 +56,7 @@ function pieeprom_config() {
     echo "Copying, $latest_pieeprom to current directory"
     echo $CP_MSG
     rpi-eeprom-config $latest_pieeprom.tmp > eeprom-config.txt
-    sed -i 's/BOOT_ORDER=0x1/BOOT_ORDER=0x21/gI' eeprom-config.txt
+    sed -i 's/BOOT_ORDER=.*/BOOT_ORDER=0x21/gI' eeprom-config.txt
     rpi-eeprom-config --out pxepi-eeprom.bin --config eeprom-config.txt $latest_pieeprom.tmp
     rpi-eeprom-update -d -f pxepi-eeprom.bin
  }
