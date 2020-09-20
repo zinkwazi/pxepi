@@ -1,9 +1,9 @@
 #!/bin/bash
-# by Greg Lawler greg@outsideopen.com
+# by Greg Lawler
+# greg@outsideopen.com
 #
-
-##### Defaults when there are no defaults
-: ${pieepromdir:=/lib/firmware/raspberrypi/bootloader/critical/}
+##### Defaults
+: ${pieepromdir:=/lib/firmware/raspberrypi/bootloader/beta/}
 : ${pname:=pieeprom-}
 
 if [ "$(id -u)" -ne 0 ]; then
@@ -11,23 +11,13 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-function pieeprom_config() {
-    get_pieeprom=$(find "$pieepromdir" -type f -name "$pname*" | sort | tail -1)
-    latest_pieeprom=$(basename $get_pieeprom)
-    CP_MSG=$(cp $get_pieeprom $latest_pieeprom.tmp)
-    echo "Copying, $latest_pieeprom to current directory"
-    echo $CP_MSG
-    rpi-eeprom-config $latest_pieeprom.tmp > bootconf.txt
- }
-
 function isPxeBoot {
     bootOrder=$(vcgencmd bootloader_config | grep BOOT_ORDER | awk -F "= " "{print $1}")
     IFS="="
     read -ra ADDR <<<"$bootOrder"
     currentBootorder=${ADDR[1]}
-    if [ $currentBootorder == "0x1" ] ; then
-      echo $currentBootorder
-      echo "PXE boot is enabled, BOOT_ORDER=0x21"
+    if [ $currentBootorder == "0x21" ] ; then
+      echo "PXE boot is enabled, BOOT_ORDER=$currentBootorder"
     else
       echo $currentBootorder
       echo "PXE boot is NOT enabled"
@@ -41,5 +31,17 @@ function enablePXE() {
     echo $UPG_MSG
     pieeprom_config
 }
-# pieeprom_version
+
+function pieeprom_config() {
+    get_pieeprom=$(find "$pieepromdir" -type f -name "$pname*" | sort | tail -1)
+    latest_pieeprom=$(basename $get_pieeprom)
+    CP_MSG=$(cp $get_pieeprom $latest_pieeprom.tmp)
+    echo "Copying, $latest_pieeprom to current directory"
+    echo $CP_MSG
+    rpi-eeprom-config $latest_pieeprom.tmp > eeprom-config.txt
+    sed -i 's/BOOT_ORDER=0x1/BOOT_ORDER=0x21/gI' eeprom-config.txt
+    rpi-eeprom-config --out pxepi-eeprom.bin --config eeprom-config.txt $latest_pieeprom.tmp
+    rpi-eeprom-update -d -f pxepi-eeprom.bin
+ }
+
 isPxeBoot
