@@ -2,7 +2,7 @@
 # by Greg Lawler
 # greg@outsideopen.com
 #
-##### Defaults
+#
 : ${pieepromdir:=/lib/firmware/raspberrypi/bootloader/beta/}
 : ${pname:=pieeprom-}
 
