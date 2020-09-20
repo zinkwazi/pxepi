@@ -11,6 +11,19 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
+function isPi4 () {
+#    piModel=$(cat /proc/device-tree/model)
+    piModel=$(tr -d '\0' < /proc/device-tree/model)
+    IFS=" "
+    read -ra ADDR <<<"$piModel"
+    currentModel=${ADDR[2]}
+    if [ $currentModel != "4" ] ; then
+      echo $piModel
+      echo "ERROR: Raspberry Pi 4 not detected"
+      exit 1
+    fi
+}
+
 function isPxeBoot {
     bootOrder=$(vcgencmd bootloader_config | grep BOOT_ORDER | awk -F "= " "{print $1}")
     IFS="="
@@ -44,4 +57,5 @@ function pieeprom_config() {
     rpi-eeprom-update -d -f pxepi-eeprom.bin
  }
 
+isPi4
 isPxeBoot
