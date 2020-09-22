@@ -3,7 +3,7 @@
 # greg@outsideopen.com
 #
 #
-: ${pieepromdir:=/lib/firmware/raspberrypi/bootloader/beta/}
+: ${pieepromdir:=/lib/firmware/raspberrypi/bootloader/critical/}
 : ${pname:=pieeprom-}
 
 if [ "$(id -u)" -ne 0 ]; then
